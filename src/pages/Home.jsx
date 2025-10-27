@@ -15,7 +15,7 @@ function Home(){
                         <p className='w-[100%]'>Find the perfect path for your next run, from scenic trails to urban loops; select various factors that are must haves on your runs; and document your adventures.</p>
                         {/*buttons*/}
                         <button className='flex flex-col w-[130px] h-[50px] bg-gray-200 rounded-xl items-center justify-center hover:scale-102 shadow-2xl'>
-                            <Link className="inline-flex text-accent hover:underline font-medium transition-colors text-black" to="/map">Sign Up →</Link> {/* change where this goes */}
+                            <a className="inline-flex text-accent hover:underline font-medium transition-colors text-black" href="/map" target="_blank" rel="noopener noreferrer">Sign Up →</a> {/* change where this goes */}
                         </button>
                     </div>
 

@@ -1,15 +1,11 @@
 import MapComp from '../components/MapComp'
 
+
 function Map() {
     return (
-        <>
-            <div className='h-full w-full'>
-
-                <MapComp></MapComp>
-                <p>hi</p>
-            </div>
-                
-        </>
+        <div className='h-screen overflow-hidden'>
+            <MapComp/>
+        </div>
     )
 }
 
