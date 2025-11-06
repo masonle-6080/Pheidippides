@@ -10,6 +10,15 @@ function MapRender() {
     const mapRef = useRef() // empty reference object (where the HTML element is stored)
     const mapContainer = useRef()
     const [ menuLoc, setMenuLoc] = useState({lng:null, lat:null, x:null, y:null});
+    const [ coords, setCoords ] = useState()
+
+    const AppendCoords = (lng, lat) => {
+        setCoords((prev) => ({...prev, end: [lng, lat]}));
+    }
+
+    const DeleteCoords = () => {
+        setCoords([]);
+    }
 
     const CloseMenu = () => {
         setMenuLoc({x:null, y:null});
@@ -19,7 +28,8 @@ function MapRender() {
         if(mapRef.current){
             return;
         }
-        //access the apit
+
+        //access the api
         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
         //creates the map
         mapRef.current = new mapboxgl.Map({
@@ -36,6 +46,7 @@ function MapRender() {
                 .addTo(mapRef.current);
         });
 
+        //on right click store data and update options
         mapRef.current.on('contextmenu', (e) => {
             e.preventDefault();
 
@@ -48,6 +59,7 @@ function MapRender() {
         mapRef.current.on('click', ()=>{    
             setMenuLoc({lng:null, lat:null, x:null, y:null})
         })
+
 
      
     }
