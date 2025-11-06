@@ -4,21 +4,71 @@ import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 import ShowMenu from './ShowMenu'
+import {optimizedRoute} from '../services/mapboxService'
 
 
 function MapRender() {
     const mapRef = useRef() // empty reference object (where the HTML element is stored)
     const mapContainer = useRef()
     const [ menuLoc, setMenuLoc] = useState({lng:null, lat:null, x:null, y:null});
-    const [ coords, setCoords ] = useState()
+    const [ coords, setCoords ] = useState([])
 
     const AppendCoords = (lng, lat) => {
-        setCoords((prev) => ({...prev, end: [lng, lat]}));
+        setCoords((prev) => [...prev, [lng,lat]]);
     }
 
     const DeleteCoords = () => {
         setCoords([]);
     }
+
+    useEffect(() => {
+        console.log('coord update: ', coords);
+
+        if(coords.length < 2){
+            return;
+        }
+        const data_json =  optimizedRoute(coords)
+            .then((data_json) => {
+                const data = data_json.routes[0];
+                const route = data.geometry;
+        
+                const geojson = {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': route
+                };
+        
+        
+                if(mapRef.current.getSource('route')){
+                    mapRef.current.getSource('route').setData(geojson);
+                } else {
+                    mapRef.current.addLayer({
+                        id: 'route',
+                        type:'line',
+                        source: { 
+                            type: 'geojson',
+                            data: geojson
+                        },
+                        layout: {
+                            'line-join': 'round',
+                            'line-cap': 'round'
+                        },
+                        paint: {
+                            'line-color': '#3887be',
+                            'line-width': 5,
+                            'line-opacity': 0.75
+                        }
+                    })
+                }
+            })
+            .catch(error => console.log('error:', error))
+
+
+            
+    
+
+    }, [coords])
+
 
     const CloseMenu = () => {
         setMenuLoc({x:null, y:null});
@@ -60,8 +110,6 @@ function MapRender() {
             setMenuLoc({lng:null, lat:null, x:null, y:null})
         })
 
-
-     
     }
 
     
@@ -89,12 +137,14 @@ function MapRender() {
             }
         }
     },[]);
+
+    
     
 
     return (
         <>
             <div className='h-full w-full bg-gray-200' ref={mapContainer}></div>
-            <ShowMenu lng={menuLoc.lng} lat={menuLoc.lat} x={menuLoc.x} y={menuLoc.y} CloseMenu={CloseMenu}></ShowMenu>
+            <ShowMenu lng={menuLoc.lng} lat={menuLoc.lat} x={menuLoc.x} y={menuLoc.y} CloseMenu={CloseMenu} AppendCoords={AppendCoords} DeleteCoords={DeleteCoords}></ShowMenu>
         </>
     )
 }
