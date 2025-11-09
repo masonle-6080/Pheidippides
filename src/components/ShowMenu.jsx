@@ -10,10 +10,10 @@ function ShowMenu({ lng, lat, x, y, CloseMenu, AppendCoords, DeleteCoords}) {
             position: 'fixed',
             left: `${x}px`,
             top: `${y}px`,
-        }} className="bg-white border border-gray-300 rounded shadow-md p-2 z-[1000] min-w-[200px]">
-            <button className="block w-full text-left px-2 py-1 hover:bg-gray-100" onClick={() => { CloseMenu(); AppendCoords(lng, lat); }}>Option 1</button>
+        }} className="bg-white border border-gray-300 rounded-2xl shadow-md p-2 z-[1000] min-w-[200px]">
+            <button className="block w-full text-left px-2 py-1 hover:bg-gray-100" onClick={() => { CloseMenu(); AppendCoords(lng, lat); }}>Waypoint</button>
             <button className="block w-full text-left px-2 py-1 hover:bg-gray-100" onClick={() => { CloseMenu(); }}>Option 2</button>
-            <button className="block w-full text-left px-2 py-1 hover:bg-gray-100" onClick={() => { CloseMenu(); DeleteCoords()}}>Option 3</button>
+            <button className="block w-full text-left px-2 py-1 hover:bg-gray-100" onClick={() => { CloseMenu(); DeleteCoords()}}>Delete</button>
         </div>
     )
 }
